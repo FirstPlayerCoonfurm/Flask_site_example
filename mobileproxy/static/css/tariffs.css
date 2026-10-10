@@ -1,0 +1,224 @@
+/* Pricing section */
+.pricing {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+}
+
+.pricing h1 {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #00d9a3 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.pricing-subtitle {
+    text-align: center;
+    color: #a0a8b3;
+    font-size: 1.15rem;
+    margin-bottom: 3rem;
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.price-card {
+    background: #1a1f26;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid #2a3441;
+    transition: all 0.3s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.price-card:hover {
+    transform: translateY(-5px);
+    border-color: #00d9a3;
+}
+
+.price-card.popular {
+    border-color: #00d9a3;
+    box-shadow: 0 0 30px rgba(0, 217, 163, 0.15);
+}
+
+.popular-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #00d9a3;
+    color: #0f1419;
+    padding: 0.25rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.price-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: #00d9a3;
+}
+
+.price-card .desc {
+    color: #a0a8b3;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    min-height: 40px;
+}
+
+/* ИСПРАВЛЕНО: цена теперь flex-контейнер, ничего не переносится */
+.price {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.price .suffix {
+    font-size: 1rem;
+    color: #a0a8b3;
+    font-weight: 400;
+}
+
+/* ИСПРАВЛЕНО: для "Договорная" уменьшаем шрифт */
+.price.custom {
+    font-size: 2rem;
+}
+
+.price-features {
+    list-style: none;
+    margin: 1.5rem 0;
+    flex-grow: 1;
+}
+
+.price-features li {
+    padding: 0.5rem 0;
+    color: #c5c9d1;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.price-features li::before {
+    content: "✓";
+    color: #00d9a3;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.buy-button {
+    display: block;
+    text-align: center;
+    padding: 0.85rem;
+    background: transparent;
+    color: #00d9a3;
+    text-decoration: none;
+    border: 1px solid #00d9a3;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.buy-button:hover {
+    background: #00d9a3;
+    color: #0f1419;
+}
+
+.price-card.popular .buy-button {
+    background: #00d9a3;
+    color: #0f1419;
+}
+
+.price-card.popular .buy-button:hover {
+    background: #00c896;
+    box-shadow: 0 0 20px rgba(0, 217, 163, 0.4);
+}
+
+/* How it works */
+.how-it-works {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+}
+
+.how-it-works h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+}
+
+.step {
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem;
+    background: linear-gradient(135deg, #00d9a3 0%, #3b82f6 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #0f1419;
+}
+
+.step h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.step p {
+    color: #a0a8b3;
+    font-size: 0.95rem;
+}
+
+/* Final CTA */
+.final-cta {
+    max-width: 800px;
+    margin: 4rem auto;
+    padding: 3rem 2rem;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(0, 217, 163, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+    border: 1px solid #2a3441;
+    border-radius: 16px;
+}
+
+.final-cta h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.final-cta p {
+    color: #a0a8b3;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+    .pricing h1 {
+        font-size: 2rem;
+    }
+}

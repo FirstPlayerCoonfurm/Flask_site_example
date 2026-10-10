@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}FAQ — MobileProxy{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/faq.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="faq-page">
+    <h1>Частые вопросы</h1>
+    <p class="faq-subtitle">Не нашли ответ? Напишите нам в VK — ответим в течение 15 минут.</p>
+
+    <div class="faq-list">
+        <div class="faq-item">
+            <button class="faq-question">
+                Что такое мобильные прокси и чем они отличаются от обычных?
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">
+                    Мобильные прокси используют IP-адреса реальных мобильных операторов. Для поисковых систем такие запросы выглядят как обычный пользователь с телефона.
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                Как работает авторотация IP?
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">
+                    Авторотация — это автоматическая смена IP-адреса. Вы можете настроить смену по таймеру или менять IP вручную через специальную ссылку/API.
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                Есть ли тестовый период?
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">
+                    Да! Мы предоставляем <strong>тестовый доступ на 24 часа</strong> с небольшим объёмом трафика. Напишите нам в VK или Telegram для получения теста.
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                Как связаться с поддержкой?
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">
+                    Основной канал — <a href="https://vk.ru/avtor154" target="_blank">VK</a>. Также доступен <a href="https://t.me/your_bot" target="_blank">Telegram</a> для альтернативного способа связи.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="faq-cta">
+        <h2>Не нашли свой вопрос?</h2>
+        <p>Напишите нам в VK — ответим в течение 15 минут.</p>
+        <div class="cta-buttons">
+            <a href="https://vk.ru/avtor154" class="cta-button" target="_blank">Написать в VK</a>
+            <a href="https://t.me/your_bot" class="cta-button secondary" target="_blank">Telegram</a>
+        </div>
+    </section>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/faq.js') }}"></script>
+{% endblock %}

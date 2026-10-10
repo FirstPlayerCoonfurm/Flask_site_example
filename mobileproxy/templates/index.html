@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}MobileProxy — Мобильные прокси для SEO{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Мобильные прокси для SEO-продвижения</h1>
+    <p>Чистые IP-адреса с авторотацией для парсинга, проверки позиций и безопасной работы с поисковыми системами. Поддержка всех регионов РФ и СНГ.</p>
+    <div class="hero-buttons">
+        <a href="https://vk.com/your_group" class="cta-button" target="_blank">Написать в VK</a>
+        <a href="https://t.me/your_bot" class="cta-button secondary" target="_blank">Telegram</a>
+    </div>
+</section>
+
+<section class="features">
+    <h2>Для каких задач подходят наши прокси</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <h3>Парсинг выдачи</h3>
+            <p>Собирайте позиции сайтов и анализируйте конкурентов без блокировок и капчи.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"></div>
+            <h3>Проверка позиций</h3>
+            <p>Актуальные данные из Яндекс и Google из любого региона — Москва, СПб, Казань и другие.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"></div>
+            <h3>Накрутка ПФ</h3>
+            <p>Безопасная работа с поведенческими факторами с уникальных мобильных IP.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🌍</div>
+            <h3>Локальное SEO</h3>
+            <p>Продвигайте сайты в локальной выдаче с IP нужного города или региона.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Авторотация IP</h3>
+            <p>Автоматическая смена IP по таймеру или через API — полный контроль над пулом.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🛡️</div>
+            <h3>Чистые IP</h3>
+            <p>Белые мобильные адреса, не засвеченные в спам-базах и блэклистах.</p>
+        </div>
+    </div>
+</section>
+
+<section class="pf-service">
+    <h2>Помогаем с настройкой поведенческих факторов</h2>
+    <p class="subtitle">Не просто продаём прокси — помогаем правильно настроить ПФ для вашего сайта. Комплексный подход к продвижению.</p>
+
+    <div class="pf-features">
+        <div class="pf-feature">
+            <div class="pf-feature-icon">📊</div>
+            <div>
+                <h3>Анализ ниши</h3>
+                <p>Изучаем конкурентов и определяем оптимальную стратегию для вашего сайта.</p>
+            </div>
+        </div>
+        <div class="pf-feature">
+            <div class="pf-feature-icon">🎯</div>
+            <div>
+                <h3>Подбор прокси</h3>
+                <p>Подбираем оптимальные регионы и объёмы трафика под ваши задачи.</p>
+            </div>
+        </div>
+        <div class="pf-feature">
+            <div class="pf-feature-icon">⚙️</div>
+            <div>
+                <h3>Настройка софта</h3>
+                <p>Помогаем настроить инструменты для работы с ПФ (ZennoPoster, BAS и др.).</p>
+            </div>
+        </div>
+        <div class="pf-feature">
+            <div class="pf-feature-icon">📈</div>
+            <div>
+                <h3>Мониторинг</h3>
+                <p>Отслеживаем результаты и корректируем стратегию для максимального эффекта.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="pf-cta">
+        <a href="https://vk.com/your_group" class="cta-button" target="_blank">Получить консультацию в VK</a>
+    </div>
+</section>
+{% endblock %}
