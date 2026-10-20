@@ -1,6 +1,11 @@
 from flask import Flask, render_template
+from admin import admin_bp
 
 app = Flask(__name__)
+app.secret_key = 'change_this_to_random_secret'  # для сессий
+
+# Регистрируем blueprint админки
+app.register_blueprint(admin_bp)
 
 @app.route('/')
 def index():

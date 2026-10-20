@@ -1,0 +1,57 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Метрики Kraken{% endblock %}
+
+{% block content %}
+<h1>Метрики Kraken</h1>
+
+<div class="period-selector">
+    <a href="?period=24h" class="{% if period == '24h' %}active{% endif %}">24 часа</a>
+    <a href="?period=7d" class="{% if period == '7d' %}active{% endif %}">7 дней</a>
+    <a href="?period=30d" class="{% if period == '30d' %}active{% endif %}">30 дней</a>
+    <button id="refreshBtn" class="btn-secondary">🔄 Обновить из API</button>
+</div>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Время</th>
+                <th>Трафик (ГБ)</th>
+                <th>Сессии</th>
+                <th>Пользователи</th>
+                <th>Доход (₽)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                <td>{{ row.timestamp.strftime('%d.%m %H:%M') }}</td>
+                <td>{{ "%.2f"|format(row.total_traffic_gb) }}</td>
+                <td>{{ row.active_sessions }}</td>
+                <td>{{ row.total_users }}</td>
+                <td>{{ "%.0f"|format(row.revenue_rub) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('refreshBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('refreshBtn');
+    btn.textContent = '⏳ Загрузка...';
+    try {
+        const res = await fetch('/admin/api/kraken/live');
+        const data = await res.json();
+        console.log('Kraken live data:', data);
+        alert('Данные получены! (смотри консоль)');
+    } catch (e) {
+        alert('Ошибка: ' + e.message);
+    }
+    btn.textContent = '🔄 Обновить из API';
+});
+</script>
+{% endblock %}

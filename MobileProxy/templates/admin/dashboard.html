@@ -1,0 +1,103 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Дашборд{% endblock %}
+
+{% block content %}
+<h1>Дашборд</h1>
+
+<div class="stats-grid">
+    {% if latest %}
+    <div class="stat-card">
+        <div class="stat-label">Трафик (всего)</div>
+        <div class="stat-value">{{ "%.1f"|format(latest.total_traffic_gb) }} ГБ</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Активные сессии</div>
+        <div class="stat-value">{{ latest.active_sessions }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Пользователей</div>
+        <div class="stat-value">{{ latest.total_users }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Доход</div>
+        <div class="stat-value">{{ "%.0f"|format(latest.revenue_rub) }} ₽</div>
+    </div>
+    {% endif %}
+    <div class="stat-card highlight">
+        <div class="stat-label">Посещений сайта (7д)</div>
+        <div class="stat-value">{{ site_visits }}</div>
+    </div>
+</div>
+
+<div class="chart-container">
+    <h2>Трафик за неделю</h2>
+    <canvas id="trafficChart"></canvas>
+</div>
+
+<div class="chart-container">
+    <h2>Доход за неделю</h2>
+    <canvas id="revenueChart"></canvas>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Данные передаём через data-атрибут, чтобы IDE не ругался -->
+<div id="chartData" 
+     data-kraken="{{ kraken_week|tojson }}"
+     style="display: none;"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const el = document.getElementById('chartData');
+    const data = JSON.parse(el.dataset.kraken);
+    const labels = data.map(d => {
+        const date = new Date(d.day);
+        return date.toLocaleDateString('ru-RU', {day: '2-digit', month: '2-digit'});
+    });
+
+    new Chart(document.getElementById('trafficChart'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Трафик (ГБ)',
+                data: data.map(d => d.traffic),
+                borderColor: '#00d9a3',
+                backgroundColor: 'rgba(0, 217, 163, 0.1)',
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { labels: { color: '#e4e6eb' } } },
+            scales: {
+                x: { ticks: { color: '#a0a8b3' }, grid: { color: '#2a3441' } },
+                y: { ticks: { color: '#a0a8b3' }, grid: { color: '#2a3441' } }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('revenueChart'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Доход (₽)',
+                data: data.map(d => d.revenue),
+                backgroundColor: '#3b82f6'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { labels: { color: '#e4e6eb' } } },
+            scales: {
+                x: { ticks: { color: '#a0a8b3' }, grid: { color: '#2a3441' } },
+                y: { ticks: { color: '#a0a8b3' }, grid: { color: '#2a3441' } }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
