@@ -5,64 +5,78 @@
 {% block content %}
 <h1>Дашборд</h1>
 
+<!-- Карточки со сводной статистикой -->
 <div class="stats-grid">
     {% if latest %}
     <div class="stat-card">
         <div class="stat-label">Трафик (всего)</div>
-        <div class="stat-value">{{ "%.1f"|format(latest.total_traffic_gb) }} ГБ</div>
+        <div class="stat-value">{{ "%.1f"|format(latest.total_traffic_gb or 0) }} ГБ</div>
     </div>
     <div class="stat-card">
         <div class="stat-label">Активные сессии</div>
-        <div class="stat-value">{{ latest.active_sessions }}</div>
+        <div class="stat-value">{{ latest.active_sessions or 0 }}</div>
     </div>
     <div class="stat-card">
         <div class="stat-label">Пользователей</div>
-        <div class="stat-value">{{ latest.total_users }}</div>
+        <div class="stat-value">{{ latest.total_users or 0 }}</div>
     </div>
     <div class="stat-card">
         <div class="stat-label">Доход</div>
-        <div class="stat-value">{{ "%.0f"|format(latest.revenue_rub) }} ₽</div>
+        <div class="stat-value">{{ "%.0f"|format(latest.revenue_rub or 0) }} ₽</div>
+    </div>
+    {% else %}
+    <div class="stat-card highlight" style="grid-column: 1 / -1;">
+        <div class="stat-label">Статистика</div>
+        <div class="stat-value">Ожидание данных от Kraken Collector...</div>
     </div>
     {% endif %}
+
     <div class="stat-card highlight">
         <div class="stat-label">Посещений сайта (7д)</div>
-        <div class="stat-value">{{ site_visits }}</div>
+        <div class="stat-value">{{ site_visits or 0 }}</div>
     </div>
 </div>
 
-<div class="chart-container">
-    <h2>Трафик за неделю</h2>
-    <canvas id="trafficChart"></canvas>
+<!-- Сетка для двух графиков рядом -->
+<div class="charts-grid">
+    <div class="chart-container">
+        <h2>Трафик за неделю</h2>
+        <canvas id="trafficChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <h2>Доход за неделю</h2>
+        <canvas id="revenueChart"></canvas>
+    </div>
 </div>
 
-<div class="chart-container">
-    <h2>Доход за неделю</h2>
-    <canvas id="revenueChart"></canvas>
-</div>
+<!-- Скрытый блок для передачи данных из Jinja в JS без ошибок IDE -->
+<div id="chartData" data-kraken="{{ kraken_week|tojson }}" style="display: none;"></div>
 {% endblock %}
 
 {% block extra_js %}
-<!-- Данные передаём через data-атрибут, чтобы IDE не ругался -->
-<div id="chartData" 
-     data-kraken="{{ kraken_week|tojson }}"
-     style="display: none;"></div>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const el = document.getElementById('chartData');
+    if (!el) return;
+
     const data = JSON.parse(el.dataset.kraken);
+    if (!data || data.length === 0) return;
+
     const labels = data.map(d => {
         const date = new Date(d.day);
         return date.toLocaleDateString('ru-RU', {day: '2-digit', month: '2-digit'});
     });
 
+    // График трафика
     new Chart(document.getElementById('trafficChart'), {
         type: 'line',
         data: {
             labels: labels,
             datasets: [{
                 label: 'Трафик (ГБ)',
-                data: data.map(d => d.traffic),
+                data: data.map(d => d.traffic || 0),
                 borderColor: '#00d9a3',
                 backgroundColor: 'rgba(0, 217, 163, 0.1)',
                 tension: 0.3,
@@ -71,30 +85,33 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: { legend: { labels: { color: '#e4e6eb' } } },
             scales: {
                 x: { ticks: { color: '#a0a8b3' }, grid: { color: '#2a3441' } },
-                y: { ticks: { color: '#a0a8b3' }, grid: { color: '#2a3441' } }
+                y: { ticks: { color: '#a0a8b3' }, grid: { color: '#2a3441' }, beginAtZero: true }
             }
         }
     });
 
+    // График дохода
     new Chart(document.getElementById('revenueChart'), {
         type: 'bar',
         data: {
             labels: labels,
             datasets: [{
                 label: 'Доход (₽)',
-                data: data.map(d => d.revenue),
+                data: data.map(d => d.revenue || 0),
                 backgroundColor: '#3b82f6'
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: { legend: { labels: { color: '#e4e6eb' } } },
             scales: {
                 x: { ticks: { color: '#a0a8b3' }, grid: { color: '#2a3441' } },
-                y: { ticks: { color: '#a0a8b3' }, grid: { color: '#2a3441' } }
+                y: { ticks: { color: '#a0a8b3' }, grid: { color: '#2a3441' }, beginAtZero: true }
             }
         }
     });
