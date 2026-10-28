@@ -1,0 +1,152 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Пользователь #{{ user_id }}{% endblock %}
+
+{% block content %}
+<div class="user-header">
+    <a href="{{ url_for('admin.users') }}" class="back-link">← Назад к списку</a>
+    <h1>Пользователь #{{ user_id }}</h1>
+</div>
+
+{% if error %}
+<div class="flash flash-error">{{ error }}</div>
+{% endif %}
+
+{% if user_data %}
+<div class="user-info-grid">
+    <div class="info-card">
+        <div class="info-label">Имя</div>
+        <div class="info-value">{{ user_data.name or '—' }}</div>
+    </div>
+    <div class="info-card">
+        <div class="info-label">Email</div>
+        <div class="info-value">{{ user_data.email or '—' }}</div>
+    </div>
+    <div class="info-card">
+        <div class="info-label">Тариф</div>
+        <div class="info-value">
+            <span class="badge badge-plan">{{ user_data.plan or user_data.tariff or '—' }}</span>
+        </div>
+    </div>
+    <div class="info-card">
+        <div class="info-label">Статус</div>
+        <div class="info-value">
+            <span class="badge badge-{{ 'active' if user_data.status == 'active' or user_data.active else 'inactive' }}">
+                {{ 'Активен' if user_data.status == 'active' or user_data.active else 'Неактивен' }}
+            </span>
+        </div>
+    </div>
+    <div class="info-card highlight">
+        <div class="info-label">Всего трафика</div>
+        <div class="info-value">{{ "%.2f"|format(user_data.traffic_gb or user_data.traffic or 0) }} ГБ</div>
+    </div>
+    <div class="info-card highlight">
+        <div class="info-label">Баланс</div>
+        <div class="info-value">{{ "%.0f"|format(user_data.balance or 0) }} ₽</div>
+    </div>
+    <div class="info-card">
+        <div class="info-label">Дата регистрации</div>
+        <div class="info-value">{{ user_data.created_at or '—' }}</div>
+    </div>
+    <div class="info-card">
+        <div class="info-label">Последняя активность</div>
+        <div class="info-value">{{ user_data.last_active or '—' }}</div>
+    </div>
+</div>
+
+<div class="period-selector">
+    <span>Период:</span>
+    <a href="?period=24h" class="{% if period == '24h' %}active{% endif %}">24 часа</a>
+    <a href="?period=7d" class="{% if period == '7d' %}active{% endif %}">7 дней</a>
+    <a href="?period=30d" class="{% if period == '30d' %}active{% endif %}">30 дней</a>
+</div>
+
+{% if user_metrics %}
+<div class="chart-container">
+    <h2>Расход трафика</h2>
+    <canvas id="userTrafficChart"></canvas>
+</div>
+{% else %}
+<div class="empty-state">
+    <div class="empty-icon"></div>
+    <h3>Нет данных по трафику</h3>
+    <p>За выбранный период метрики не найдены.</p>
+</div>
+{% endif %}
+
+<div class="user-actions">
+    <h3>Действия</h3>
+    <div class="action-buttons">
+        <button class="btn-secondary" onclick="copyProxyLink()">📋 Скопировать ссылку на прокси</button>
+        <button class="btn-secondary" onclick="resetUser()"> Сбросить сессию</button>
+        <a href="https://vk.com/your_group" target="_blank" class="btn-secondary">💬 Написать в VK</a>
+    </div>
+</div>
+
+{% else %}
+<div class="empty-state">
+    <div class="empty-icon">❓</div>
+    <h3>Данные пользователя не загружены</h3>
+    <p>Проверь настройки Kraken API или ID пользователя.</p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{% if user_metrics %}
+<div id="userData" 
+     data-metrics="{{ user_metrics|tojson }}"
+     style="display: none;"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const el = document.getElementById('userData');
+    const metrics = JSON.parse(el.dataset.metrics);
+
+    const labels = metrics.map(m => {
+        const date = new Date(m.timestamp || m.date || m.time);
+        return date.toLocaleString('ru-RU', {day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'});
+    });
+    const trafficData = metrics.map(m => parseFloat(m.traffic_gb || m.traffic || m.value || 0));
+
+    new Chart(document.getElementById('userTrafficChart'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Трафик (ГБ)',
+                data: trafficData,
+                borderColor: '#00d9a3',
+                backgroundColor: 'rgba(0, 217, 163, 0.1)',
+                tension: 0.3,
+                fill: true,
+                pointRadius: 3,
+                pointHoverRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { labels: { color: '#e4e6eb' } } },
+            scales: {
+                x: { ticks: { color: '#a0a8b3', maxRotation: 45 }, grid: { color: '#2a3441' } },
+                y: { ticks: { color: '#a0a8b3' }, grid: { color: '#2a3441' }, beginAtZero: true }
+            }
+        }
+    });
+});
+
+function copyProxyLink() {
+    const link = 'https://proxy.example.com/user/{{ user_id }}';
+    navigator.clipboard.writeText(link).then(() => {
+        alert('Ссылка скопирована!');
+    });
+}
+
+function resetUser() {
+    if (confirm('Точно сбросить сессию пользователя?')) {
+        alert('Функция в разработке');
+    }
+}
+</script>
+{% endif %}
+{% endblock %}

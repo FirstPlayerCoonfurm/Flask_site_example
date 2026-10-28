@@ -1,0 +1,69 @@
+{% extends "admin/base.html" %}
+{% block title %}Управление услугами{% endblock %}
+
+{% block content %}
+<div class="services-header">
+    <h1>Конструктор услуг</h1>
+
+    <div class="services-actions">
+        <!-- Красивый switch-toggle для блока спонсоров -->
+        <div class="sponsor-toggle">
+            <span class="toggle-label">Блок спонсоров</span>
+            <form method="POST" action="{{ url_for('admin.toggle_sponsors') }}" style="display: contents;">
+                <label class="switch">
+                    <input type="checkbox" name="toggle" {% if sponsors_enabled %}checked{% endif %} onchange="this.form.submit()">
+                    <span class="slider"></span>
+                </label>
+            </form>
+        </div>
+
+        <a href="{{ url_for('admin.service_add') }}" class="btn-add">
+            <span>+</span> Добавить услугу
+        </a>
+    </div>
+</div>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th width="60">Иконка</th>
+                <th>Название</th>
+                <th>Подзаголовок</th>
+                <th width="110">Тип</th>
+                <th width="220">Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in services %}
+            <tr>
+                <td class="icon-cell">{{ s.icon }}</td>
+                <td><strong>{{ s.title }}</strong></td>
+                <td><span class="badge badge-plan">{{ s.subtitle }}</span></td>
+                <td>
+                    {% if s.is_sponsor %}
+                        <span class="badge badge-sponsor">Спонсор</span>
+                    {% else %}
+                        <span class="badge badge-main">Основной</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="action-buttons">
+                        <a href="{{ url_for('admin.service_edit', service_id=s.id) }}" class="btn-action btn-edit">Изменить</a>
+                        <a href="{{ url_for('admin.service_delete', service_id=s.id) }}" class="btn-action btn-delete" onclick="return confirm('Удалить услугу «{{ s.title }}»?')">Удалить</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if services|length == 0 %}
+<div class="empty-state">
+    <div class="empty-icon">📦</div>
+    <h3>Услуги ещё не добавлены</h3>
+    <p>Нажмите «Добавить услугу», чтобы создать первую карточку.</p>
+</div>
+{% endif %}
+{% endblock %}

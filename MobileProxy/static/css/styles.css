@@ -1,0 +1,133 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0f1419;
+    color: #e4e6eb;
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    background: rgba(15, 20, 25, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #1e2732;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #00d9a3;
+    text-decoration: none;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+nav a {
+    color: #e4e6eb;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+nav a:hover,
+nav a.active {
+    color: #00d9a3;
+}
+
+/* Footer */
+footer {
+    background: #0a0e13;
+    border-top: 1px solid #1e2732;
+    padding: 2rem;
+    text-align: center;
+    color: #6b7280;
+    margin-top: 4rem;
+}
+
+/* Общие кнопки */
+.cta-button {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    background: #00d9a3;
+    color: #0f1419;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+    box-shadow: 0 0 20px rgba(0, 217, 163, 0.3);
+}
+
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(0, 217, 163, 0.5);
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+    nav ul {
+        gap: 1rem;
+    }
+}
+
+/* Footer with social */
+.footer-social {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.footer-social a {
+    color: #a0a8b3;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.footer-social a:hover {
+    color: #00d9a3;
+}
+
+/* Multiple CTA buttons */
+.hero-buttons,
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.cta-button.secondary {
+    background: transparent;
+    color: #00d9a3;
+    border: 1px solid #00d9a3;
+    box-shadow: none;
+}
+
+.cta-button.secondary:hover {
+    background: #00d9a3;
+    color: #0f1419;
+    box-shadow: 0 0 20px rgba(0, 217, 163, 0.3);
+}

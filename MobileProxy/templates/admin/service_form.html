@@ -1,0 +1,37 @@
+{% extends "admin/base.html" %}
+{% block title %}{% if service %}Редактирование{% else %}Добавление{% endif %} услуги{% endblock %}
+
+{% block content %}
+<h1>{% if service %}Редактировать{% else %}Новая услуга{% endif %}</h1>
+<div class="info-card" style="max-width: 600px;">
+    <form method="POST">
+        <div style="margin-bottom: 1.5rem;">
+            <label class="info-label">Иконка (эмодзи)</label>
+            <input type="text" name="icon" value="{{ service.icon if service else '' }}" required style="width: 100%; padding: 0.8rem; background: #0f1419; border: 1px solid #2a3441; border-radius: 8px; color: #e4e6eb; font-size: 1.5rem;">
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+            <label class="info-label">Название услуги</label>
+            <input type="text" name="title" value="{{ service.title if service else '' }}" required placeholder="Например: Мобильные прокси" style="width: 100%; padding: 0.8rem; background: #0f1419; border: 1px solid #2a3441; border-radius: 8px; color: #e4e6eb;">
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+            <label class="info-label">Подзаголовок (тип)</label>
+            <input type="text" name="subtitle" value="{{ service.subtitle if service else '' }}" placeholder="Например: приват, shared" style="width: 100%; padding: 0.8rem; background: #0f1419; border: 1px solid #2a3441; border-radius: 8px; color: #e4e6eb;">
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+            <label class="info-label">Краткое описание</label>
+            <textarea name="description" rows="3" placeholder="Описание для карточки..." style="width: 100%; padding: 0.8rem; background: #0f1419; border: 1px solid #2a3441; border-radius: 8px; color: #e4e6eb; resize: vertical;">{{ service.description if service else '' }}</textarea>
+        </div>
+
+        <!-- ЧЕКБОКС СПОНСОРА -->
+        <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;">
+            <input type="checkbox" name="is_sponsor" id="is_sponsor" {% if service and service.is_sponsor %}checked{% endif %} style="width: 20px; height: 20px; accent-color: #00d9a3;">
+            <label for="is_sponsor" class="info-label" style="margin: 0; cursor: pointer;">Это спонсорская карточка (попадет в дополнительный блок)</label>
+        </div>
+
+        <div style="display: flex; gap: 1rem;">
+            <button type="submit" class="cta-button" style="border: none; cursor: pointer;">Сохранить</button>
+            <a href="{{ url_for('admin.services_list') }}" class="btn-secondary" style="padding: 1rem 2rem; text-decoration: none; display: inline-block;">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

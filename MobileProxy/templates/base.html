@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MobileProxy{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="logo">MobileProxy</a>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">Главная</a></li>
+                    <li><a href="{{ url_for('tariffs') }}" class="{% if request.endpoint == 'tariffs' %}active{% endif %}">Тарифы</a></li>
+                    <li><a href="{{ url_for('faq') }}" class="{% if request.endpoint == 'faq' %}active{% endif %}">FAQ</a></li>
+                    <li><a href="{{ url_for('contacts') }}" class="{% if request.endpoint == 'contacts' %}active{% endif %}">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer>
+        <div class="footer-social">
+            <a href="https://vk.com/your_group" target="_blank" title="VKontakte">VK</a>
+            <a href="https://t.me/your_bot" target="_blank" title="Telegram">Telegram</a>
+        </div>
+        <p>&copy; 2026 MobileProxy. Все права защищены.</p>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
