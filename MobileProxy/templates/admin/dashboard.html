@@ -30,71 +30,111 @@
     </div>
 </div>
 
-<div class="chart-container">
-    <h2>Трафик за неделю</h2>
-    <canvas id="trafficChart"></canvas>
-</div>
+<div class="charts-grid">
+    <div class="chart-container">
+        <h2>Трафик за неделю</h2>
+        <canvas id="trafficChart"></canvas>
+    </div>
 
-<div class="chart-container">
-    <h2>Доход за неделю</h2>
-    <canvas id="revenueChart"></canvas>
+    <div class="chart-container">
+        <h2>Доход за неделю</h2>
+        <canvas id="revenueChart"></canvas>
+    </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<!-- Данные передаём через data-атрибут, чтобы IDE не ругался -->
-<div id="chartData" 
-     data-kraken="{{ kraken_week|tojson }}"
-     style="display: none;"></div>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const el = document.getElementById('chartData');
+    if (!el) return;
+
     const data = JSON.parse(el.dataset.kraken);
+
+    // Проверяем, есть ли данные
+    if (!data || data.length === 0) {
+        // Показываем сообщение "Нет данных" вместо пустых графиков
+        const trafficChart = document.getElementById('trafficChart');
+        const revenueChart = document.getElementById('revenueChart');
+
+        if (trafficChart) {
+            trafficChart.parentElement.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #a0a8b3; font-size: 1.1rem;">📊 Нет данных за последние 7 дней</div>';
+        }
+        if (revenueChart) {
+            revenueChart.parentElement.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #a0a8b3; font-size: 1.1rem;">💰 Нет данных за последние 7 дней</div>';
+        }
+        return;
+    }
+
     const labels = data.map(d => {
         const date = new Date(d.day);
         return date.toLocaleDateString('ru-RU', {day: '2-digit', month: '2-digit'});
     });
 
+    // График трафика
     new Chart(document.getElementById('trafficChart'), {
         type: 'line',
         data: {
             labels: labels,
             datasets: [{
                 label: 'Трафик (ГБ)',
-                data: data.map(d => d.traffic),
+                data: data.map(d => parseFloat(d.traffic) || 0),
                 borderColor: '#00d9a3',
                 backgroundColor: 'rgba(0, 217, 163, 0.1)',
                 tension: 0.3,
-                fill: true
+                fill: true,
+                pointRadius: 4,
+                pointHoverRadius: 6
             }]
         },
         options: {
             responsive: true,
-            plugins: { legend: { labels: { color: '#e4e6eb' } } },
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: '#e4e6eb' } }
+            },
             scales: {
-                x: { ticks: { color: '#a0a8b3' }, grid: { color: '#2a3441' } },
-                y: { ticks: { color: '#a0a8b3' }, grid: { color: '#2a3441' } }
+                x: {
+                    ticks: { color: '#a0a8b3' },
+                    grid: { color: '#2a3441' }
+                },
+                y: {
+                    ticks: { color: '#a0a8b3' },
+                    grid: { color: '#2a3441' },
+                    beginAtZero: true
+                }
             }
         }
     });
 
+    // График дохода
     new Chart(document.getElementById('revenueChart'), {
         type: 'bar',
         data: {
             labels: labels,
             datasets: [{
                 label: 'Доход (₽)',
-                data: data.map(d => d.revenue),
+                data: data.map(d => parseFloat(d.revenue) || 0),
                 backgroundColor: '#3b82f6'
             }]
         },
         options: {
             responsive: true,
-            plugins: { legend: { labels: { color: '#e4e6eb' } } },
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: '#e4e6eb' } }
+            },
             scales: {
-                x: { ticks: { color: '#a0a8b3' }, grid: { color: '#2a3441' } },
-                y: { ticks: { color: '#a0a8b3' }, grid: { color: '#2a3441' } }
+                x: {
+                    ticks: { color: '#a0a8b3' },
+                    grid: { color: '#2a3441' }
+                },
+                y: {
+                    ticks: { color: '#a0a8b3' },
+                    grid: { color: '#2a3441' },
+                    beginAtZero: true
+                }
             }
         }
     });
