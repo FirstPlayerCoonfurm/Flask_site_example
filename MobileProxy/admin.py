@@ -58,18 +58,24 @@ def dashboard():
     conn = get_db()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
 
+    # Запрос с COALESCE для обработки NULL
     try:
         cursor.execute("""
-            SELECT date_trunc('day', timestamp) as day,
-                   SUM(total_traffic_gb) as traffic,
-                   AVG(active_sessions) as avg_sessions,
-                   SUM(revenue_rub) as revenue
+            SELECT
+                date_trunc('day', timestamp) as day,
+                COALESCE(SUM(total_traffic_gb), 0) as traffic,
+                COALESCE(AVG(active_sessions), 0) as avg_sessions,
+                COALESCE(SUM(revenue_rub), 0) as revenue
             FROM kraken_metrics
             WHERE timestamp >= NOW() - INTERVAL '7 days'
             GROUP BY day
             ORDER BY day
         """)
         kraken_week = cursor.fetchall()
+
+        # Если данных нет, создаём пустой список
+        if not kraken_week:
+            kraken_week = []
 
         cursor.execute("SELECT * FROM kraken_metrics ORDER BY timestamp DESC LIMIT 1")
         latest = cursor.fetchone()
@@ -78,7 +84,7 @@ def dashboard():
         kraken_week = []
         latest = None
 
-    # Безопасный запрос к таблице Umami (её может не быть в этой БД)
+    # Безопасный запрос к Umami
     site_visits = 0
     try:
         cursor.execute("""
