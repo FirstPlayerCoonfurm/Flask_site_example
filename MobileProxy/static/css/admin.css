@@ -707,3 +707,41 @@ input:focus + .slider {
         text-align: center;
     }
 }
+
+/* Сетка для графиков (2 в ряд) */
+.charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.chart-container {
+    background: #1a1f26;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #2a3441;
+    position: relative;
+    height: 350px;
+}
+
+.chart-container h2 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: #e4e6eb;
+}
+
+.chart-container canvas {
+    width: 100% !important;
+    height: calc(100% - 40px) !important;
+}
+
+/* На мобильных графики встанут друг под другом */
+@media (max-width: 1024px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+    .chart-container {
+        height: 300px;
+    }
+}
